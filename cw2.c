@@ -117,21 +117,24 @@ uint64_t timeInMicroseconds(void){
 /*
   This should be a signal handler for signals issued by the interval timer.
 */
-void timer_handler (int signum)
-{
-  /* ***************************************************************************** */
-  /* COMPLETE THIS CODE (replace existing code) */
-  /* ***************************************************************************** */
-  printf("timer_handler: not implemented; should set value of time_out; current value: %d\n", timed_out);
+void timer_handler (int signum){
+
+  timed_out = 1;  // set the global flag for 
+
 }
 
 /* 
    Initialise the interval timer here.
 */
 void initITimer(uint64_t timeout){
-  /* ***************************************************************************** */
-  /* COMPLETE THIS CODE */
-  /* ***************************************************************************** */
+
+  struct itimerval timer;
+  signal(SIGALRM, timer_handler);       // register handler
+  timer.it_value.tv_sec = 0;
+  timer.it_value.tv_usec = timeout;     // timeout in microseconds
+  timer.it_interval.tv_sec = 0;        // no auto-repeat
+  timer.it_interval.tv_usec = 0;
+  setitimer(ITIMER_REAL, &timer, NULL);
 
 }
 
